@@ -1,40 +1,56 @@
-import { useEffect, useState } from 'react';
-import { Container, Spinner, Alert } from 'reactstrap';
+import { useState } from 'react';
+import {
+  Container,
+  Spinner,
+  Alert,
+  Row,
+  Button,
+  Col,
+  Label,
+  Dropdown,
+} from 'reactstrap';
+import { Link } from 'react-router-dom';
 
-import { api } from '../api';
 import { SearchInput } from '../components/SearchInput';
 import { RecipesList } from '../components/RecipesList';
+import useRecipes from '../hooks/useRecipes';
+import removeAccents from '../utils/removeAccents';
 
 export function RecipeListPage() {
-  const [recipes, setRecipes] = useState([]);
-  const [isLoading, setLoading] = useState(false);
-  const [error, setError] = useState();
   const [searchValue, setSearchValue] = useState('');
 
-  const filterredRecipes = recipes.filter((recipe) =>
-    recipe.title.toLowerCase().includes(searchValue.toLowerCase()),
-  );
+  const { isLoading, recipes, hasError } = useRecipes('/recipes');
 
-  useEffect(() => {
-    setLoading(true);
+  const filterredRecipes = recipes.filter(({ title }) => {
+    return removeAccents(title).includes(removeAccents(searchValue));
+  });
 
-    api
-      .get('/recipes')
-      .then((res) => setRecipes(res.data))
-      .catch((error) => setError(error))
-      .finally(() => setLoading(false));
-  }, []);
+  const handleSearchInputChange = ({ target }) => setSearchValue(target.value);
 
   return (
     <Container>
-      <h1>Recepty</h1>
-      <SearchInput
-        className="mb-4"
-        value={searchValue}
-        onChange={(event) => setSearchValue(event.target.value)}
-      />
+      <Row>
+        <Col lg={2}>
+          <h1>Recepty</h1>
+        </Col>
+        <Col>
+          <Link to="/add">
+            <Button color="success" size="sm">
+              Přidat recept
+            </Button>
+          </Link>
+        </Col>
+      </Row>
+      <Col>
+        <SearchInput
+          className="mb-4"
+          value={searchValue}
+          onChange={handleSearchInputChange}
+        />
+      </Col>
+      <Col></Col>
       {isLoading && <Spinner className="mb-4" />}
-      {error && (
+      {hasError && (
         <Alert color="danger">Vyskytla se chyba při načítání dat</Alert>
       )}
       <RecipesList recipes={filterredRecipes} />
