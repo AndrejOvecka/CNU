@@ -1,35 +1,23 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import {
-  Button,
-  Modal,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  Container,
-} from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 
 export function DeleteRecipeButton(props) {
   const { title } = props;
-  const [state, setState] = useState(false);
-
-  const toggle = () => setState(!state);
+  const [showModal, setShowModal] = useState(false);
 
   return (
     <div className="mt-2 mb-3">
-      <Button className="btn btn-danger " onClick={toggle}>
+      <Button className="btn btn-danger " onClick={() => setShowModal(true)}>
         Smazat recept
       </Button>
-      <Modal isOpen={state}>
+      <Modal isOpen={showModal}>
         <ModalHeader>Smazat recept</ModalHeader>
         <ModalBody>Opravdu chcete smazat recept {title}?</ModalBody>
         <ModalFooter>
-          <Link to="/">
-            <Button color="primary" {...props}>
-              Smazat
-            </Button>
-          </Link>
-          <Button outline color="danger" onClick={toggle}>
+          <Button color="primary" {...props}>
+            Smazat
+          </Button>
+          <Button outline color="danger" onClick={() => setShowModal(false)}>
             Zrušit
           </Button>
         </ModalFooter>

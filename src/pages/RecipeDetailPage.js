@@ -1,12 +1,12 @@
 import { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import {
   Container,
   Spinner,
   Alert,
   Row,
   Col,
-  List,
   Button,
   ButtonGroup,
   Input,
@@ -14,16 +14,16 @@ import {
 import { api } from '../api';
 
 import { DeleteRecipeButton } from '../components/DeleteRecipeButton';
+import { Direcions } from '../components/Directions';
 import { IngredientsList } from '../components/IngredientsList';
 import useRecipe from '../hooks/useRecipe';
-import splitedDirections from '../utils/splitDirections';
 import toHoursAndMinutes from '../utils/toHoursAndMinutes';
 
 export function RecipeDetailPage() {
   const [error, setError] = useState(false);
-  const [loading, setLoading] = useState(false);
   const [portions, setPortions] = useState(1);
   const { slug } = useParams();
+  const navigate = useNavigate();
 
   const { isLoading, recipe, hasError } = useRecipe(`/recipes/${slug}`);
 
@@ -43,11 +43,12 @@ export function RecipeDetailPage() {
 
   const handleDeleteRecipe = async (_id) => {
     try {
-      setLoading(true);
       await api.delete(`/recipes/${_id}`);
-      setLoading(false);
-    } catch (error) {
-      setError(error);
+      toast.success('Recept byl smazan');
+      navigate('/');
+    } catch (errorMessage) {
+      setError(errorMessage);
+      toast.error(error);
     }
   };
 
@@ -60,9 +61,11 @@ export function RecipeDetailPage() {
         <Col lg={4} className="d-flex justify-content-end">
           <Row>
             <Col lg={4} className="mr-4">
-              <Button outline color="primary" className="mt-2">
-                Upravit
-              </Button>
+              <Link to={{ pathname: `/recipe/edit/${slug}` }}>
+                <Button outline color="primary" className="mt-2">
+                  Upravit
+                </Button>
+              </Link>
             </Col>
             <Col lg={8}>
               <DeleteRecipeButton
@@ -80,7 +83,7 @@ export function RecipeDetailPage() {
           </Row>
           <p>Ingredience:</p>
           <Row>
-            <Col lg={4} className="mt-2">
+            <Col lg={5} className="mt-2">
               <p>Počet porcí</p>
             </Col>
             <Col>
@@ -89,6 +92,7 @@ export function RecipeDetailPage() {
                   style={{ width: '45px' }}
                   placeholder={portions}
                   value={portions}
+                  onChange={(e) => setPortions(e.target.value)}
                 />
                 <Button
                   color="primary"
@@ -98,7 +102,6 @@ export function RecipeDetailPage() {
                 >
                   +
                 </Button>
-
                 <Button
                   color="primary"
                   outline
@@ -111,22 +114,9 @@ export function RecipeDetailPage() {
             </Col>
           </Row>
           <IngredientsList ingredients={ingredients} portions={portions} />
-          {/* <List type="unstyled">
-            {ingredients.map(({ _id, amount, amountUnit, name }) => (
-              <li key={_id}>
-                {amount * portions} {amountUnit} - {name}
-              </li>
-            ))}
-          </List> */}
         </Col>
         <Col lg={8}>
-          <ol>
-            {splitedDirections(directions).map((id) => (
-              <li key={id} lg={3} md={4} sm={6} xs={12}>
-                {id}
-              </li>
-            ))}
-          </ol>
+          <Direcions directions={directions} />
         </Col>
       </Row>
     </Container>
