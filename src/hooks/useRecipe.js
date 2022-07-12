@@ -13,9 +13,9 @@ const useRecipe = (url) => {
     api
       .get(url)
       .then((response) => {
-        console.log(response.data);
         setRecipe(response.data);
         setIsLoading(false);
+        console.log(response);
       })
       .catch((error) => {
         setHasError(true);

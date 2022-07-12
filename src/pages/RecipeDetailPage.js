@@ -1,16 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import {
-  Container,
-  Spinner,
-  Alert,
-  Row,
-  Col,
-  Button,
-  ButtonGroup,
-  Input,
-} from 'reactstrap';
+import { Container, Spinner, Alert, Row, Col, Button, Input } from 'reactstrap';
 import { api } from '../api';
 
 import { DeleteRecipeButton } from '../components/DeleteRecipeButton';
@@ -61,7 +52,7 @@ export function RecipeDetailPage() {
         <Col lg={4} className="d-flex justify-content-end">
           <Row>
             <Col lg={4} className="mr-4">
-              <Link to={{ pathname: `/recipe/edit/${slug}` }}>
+              <Link to={{ pathname: `/recipe/edit/${_id}` }}>
                 <Button outline color="primary" className="mt-2">
                   Upravit
                 </Button>
@@ -79,45 +70,33 @@ export function RecipeDetailPage() {
       <Row>
         <Col lg={4}>
           <Row>
-            <h5>Čas přípravy: {toHoursAndMinutes(preparationTime)}</h5>
+            {preparationTime && (
+              <h5>Čas přípravy: {toHoursAndMinutes(preparationTime)}</h5>
+            )}
           </Row>
           <p>Ingredience:</p>
           <Row>
-            <Col lg={5} className="mt-2">
+            <Col className="mt-2">
               <p>Počet porcí</p>
             </Col>
             <Col>
-              <ButtonGroup>
+              {ingredients && (
                 <Input
-                  style={{ width: '45px' }}
+                  style={{ width: '60px' }}
                   placeholder={portions}
                   value={portions}
+                  type="number"
+                  min={1}
                   onChange={(e) => setPortions(e.target.value)}
                 />
-                <Button
-                  color="primary"
-                  outline
-                  size="sm"
-                  onClick={() => setPortions(portions + 1)}
-                >
-                  +
-                </Button>
-                <Button
-                  color="primary"
-                  outline
-                  size="sm"
-                  onClick={() => setPortions(portions - 1)}
-                >
-                  -
-                </Button>
-              </ButtonGroup>
+              )}
             </Col>
           </Row>
-          <IngredientsList ingredients={ingredients} portions={portions} />
+          {ingredients && (
+            <IngredientsList ingredients={ingredients} portions={portions} />
+          )}
         </Col>
-        <Col lg={8}>
-          <Direcions directions={directions} />
-        </Col>
+        <Col lg={8}>{directions && <Direcions directions={directions} />}</Col>
       </Row>
     </Container>
   );

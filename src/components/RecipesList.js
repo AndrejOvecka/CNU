@@ -12,6 +12,7 @@ export function RecipesList({ recipes }) {
             preparationTime={preparationTime}
             slug={slug}
             sideDish={sideDish}
+            _id={_id}
           />
         </Col>
       ))}

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Container, Spinner, Alert, Row, Button, Col } from 'reactstrap';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { SearchInput } from '../components/SearchInput';
 import { RecipesList } from '../components/RecipesList';
@@ -11,18 +11,21 @@ export function RecipeListPage() {
   const [searchValue, setSearchValue] = useState('');
   const [data, setData] = useState([]);
   const [sortType, setSortType] = useState('title');
+  const navigate = useNavigate();
 
   const { isLoading, recipes, hasError } = useRecipes('/recipes');
 
   const handleSearchInputChange = ({ target }) => setSearchValue(target.value);
 
+  //filtrovanie receptov, odstranenie diakritiky
   useEffect(() => {
     const filterredRecipes = recipes.filter(({ title }) => {
       return removeAccents(title).includes(removeAccents(searchValue));
     });
     setData(filterredRecipes);
-  }, [recipes]);
+  }, [recipes, searchValue]);
 
+  // sorting podla casu pripravy a abecedy
   useEffect(() => {
     const sortArray = (type) => {
       const types = {
@@ -30,17 +33,17 @@ export function RecipeListPage() {
         preparationTime: 'preparationTime',
       };
       const sortProperty = types[type];
-      const sorted = [...data].sort(
-        (a, b) => b[sortProperty] - a[sortProperty],
+      const sorted = [...data].sort((a, b) =>
+        typeof a[sortProperty] === 'string' &&
+        typeof b[sortProperty] === 'string'
+          ? a[sortProperty].localeCompare(b[sortProperty])
+          : b[sortProperty] - a[sortProperty],
       );
       setData(sorted);
     };
 
     sortArray(sortType);
   }, [sortType]);
-
-  console.log(data);
-  console.log(sortType);
 
   return (
     <Container>
@@ -49,11 +52,13 @@ export function RecipeListPage() {
           <h1>Recepty</h1>
         </Col>
         <Col>
-          <Link to="/recipe/add">
-            <Button color="success" size="sm">
-              Přidat recept
-            </Button>
-          </Link>
+          <Button
+            color="success"
+            size="sm"
+            onClick={() => navigate('/recipe/add')}
+          >
+            Přidat recept
+          </Button>
         </Col>
       </Row>
       <Row>
@@ -65,17 +70,20 @@ export function RecipeListPage() {
           />
         </Col>
         <Col lg={2}>
-          <select onChange={(e) => setSortType(e.target.value)}>
-            <option value="preparationTime">Čas přípravy</option>
-            <option value="title">Abecedně</option>
-          </select>
+          <Row>
+            <span>Seřadit podle</span>
+            <select onChange={(e) => setSortType(e.target.value)}>
+              <option value="title">Abecedy</option>
+              <option value="preparationTime">Čas přípravy</option>
+            </select>
+          </Row>
         </Col>
       </Row>
       {isLoading && <Spinner className="mb-4" />}
       {hasError && (
         <Alert color="danger">Vyskytla se chyba při načítání dat</Alert>
       )}
-      {data && <RecipesList recipes={data} />}
+      <RecipesList recipes={data} />
     </Container>
   );
 }
