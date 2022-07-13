@@ -40,12 +40,11 @@ export function AddRecipePage() {
     setIngredients(
       ingredients.filter((ingredient) => ingredient.name !== name),
     );
-    console.log(ingredients);
   };
 
   useEffect(() => {
-    console.log(recipe);
-  }, [recipe]);
+    setRecipe({ ...recipe, ingredients: ingredients });
+  }, [ingredients]);
 
   const handleAddRecipe = async () => {
     if (recipe.title.trim().length !== 0) {
@@ -128,9 +127,6 @@ export function AddRecipePage() {
             />
           </Col>
         </Row>
-        <br />
-        <br />
-        <br />
         <br />
         <Row>
           {ingredients.map(({ name, amount, amountUnit }) => (

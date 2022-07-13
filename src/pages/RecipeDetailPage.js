@@ -13,10 +13,11 @@ import toHoursAndMinutes from '../utils/toHoursAndMinutes';
 export function RecipeDetailPage() {
   const [error, setError] = useState(false);
   const [portions, setPortions] = useState(1);
-  const { slug } = useParams();
+  const { id } = useParams();
   const navigate = useNavigate();
 
-  const { isLoading, recipe, hasError } = useRecipe(`/recipes/${slug}`);
+  const { isLoading, recipe, hasError } = useRecipe(`/recipes/${id}`);
+  console.log('toto je recept: ' + recipe);
 
   if (isLoading) {
     return <Spinner />;
@@ -30,11 +31,11 @@ export function RecipeDetailPage() {
     return null;
   }
 
-  const { _id, title, preparationTime, ingredients, directions } = recipe;
+  const { title, preparationTime, ingredients, directions } = recipe;
 
-  const handleDeleteRecipe = async (_id) => {
+  const handleDeleteRecipe = async (id) => {
     try {
-      await api.delete(`/recipes/${_id}`);
+      await api.delete(`/recipes/${id}`);
       toast.success('Recept byl smazan');
       navigate('/');
     } catch (errorMessage) {
@@ -52,7 +53,7 @@ export function RecipeDetailPage() {
         <Col lg={4} className="d-flex justify-content-end">
           <Row>
             <Col lg={4} className="mr-4">
-              <Link to={{ pathname: `/recipe/edit/${_id}` }}>
+              <Link to={{ pathname: `/recipe/${id}/edit` }}>
                 <Button outline color="primary" className="mt-2">
                   Upravit
                 </Button>
@@ -60,7 +61,7 @@ export function RecipeDetailPage() {
             </Col>
             <Col lg={8}>
               <DeleteRecipeButton
-                onClick={() => handleDeleteRecipe(_id)}
+                onClick={() => handleDeleteRecipe(id)}
                 title={title}
               />
             </Col>

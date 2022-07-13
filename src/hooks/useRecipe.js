@@ -15,7 +15,6 @@ const useRecipe = (url) => {
       .then((response) => {
         setRecipe(response.data);
         setIsLoading(false);
-        console.log(response);
       })
       .catch((error) => {
         setHasError(true);
