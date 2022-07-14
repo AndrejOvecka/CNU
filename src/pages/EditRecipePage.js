@@ -8,11 +8,11 @@ import {
   Container,
   Form,
   Input,
-  List,
   Row,
   Spinner,
 } from 'reactstrap';
 import { api } from '../api';
+import { FormIngredientsList } from '../components/FormIngredientsList';
 
 import useRecipe from '../hooks/useRecipe';
 
@@ -53,7 +53,7 @@ export function EditRecipePage() {
     return null;
   }
 
-  const handleEditRecipe = async () => {
+  const handleSubmit = async () => {
     try {
       const newRecipe = {
         ...recipe,
@@ -85,6 +85,7 @@ export function EditRecipePage() {
   };
 
   const handleRemoveIngredient = (name) => {
+    console.log('Funkcia sa zvolala');
     setNewIngredients(
       newIngredients.filter((ingredient) => ingredient.name !== name),
     );
@@ -93,7 +94,7 @@ export function EditRecipePage() {
   return (
     <Container>
       <h1>Upravit recept</h1>
-      <Button onClick={() => handleEditRecipe()}>Uložit</Button>
+      <Button onClick={() => handleSubmit()}>Uložit</Button>
       <Form>
         <Row className="mt-4">
           <Col>
@@ -114,9 +115,10 @@ export function EditRecipePage() {
         </Row>
         <br />
         <Row>
+          <p>Ingredience</p>
           <Col>
             <Input
-              placeholder="Ingredience"
+              placeholder="Nazev ingredience"
               value={ingredientName}
               type="text"
               onChange={(e) => setIngredientName(e.target.value)}
@@ -152,16 +154,10 @@ export function EditRecipePage() {
           </Col>
         </Row>
         <br />
-        <Row>
-          {newIngredients.map(({ name, amount, amountUnit }) => (
-            <List type="unstyled" key={name}>
-              <li>
-                {amount} {amountUnit} - {name}
-              </li>
-              <Button onClick={() => handleRemoveIngredient(name)}>-</Button>
-            </List>
-          ))}
-        </Row>
+        <FormIngredientsList
+          ingredients={newIngredients}
+          handleRemoveIngredient={handleRemoveIngredient}
+        />
       </Form>
     </Container>
   );

@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Button, Col, Container, Form, Input, List, Row } from 'reactstrap';
 import { api } from '../api';
+import { FormIngredientsList } from '../components/FormIngredientsList';
+import { SubmitButton } from '../components/SubmitButton';
 
 export function AddRecipePage() {
   const [error, setError] = useState(false);
@@ -46,7 +48,7 @@ export function AddRecipePage() {
     setRecipe({ ...recipe, ingredients: ingredients });
   }, [ingredients]);
 
-  const handleAddRecipe = async () => {
+  const handleSubmit = async () => {
     if (recipe.title.trim().length !== 0) {
       try {
         await api.post(`/recipes`, recipe);
@@ -64,7 +66,7 @@ export function AddRecipePage() {
   return (
     <Container>
       <h1>Přidat recept</h1>
-      <Button onClick={() => handleAddRecipe()}>Uložit</Button>
+      <SubmitButton handleSubmit={() => handleSubmit()} />
       <Form>
         <Row className="mt-4">
           <Col>
@@ -128,16 +130,10 @@ export function AddRecipePage() {
           </Col>
         </Row>
         <br />
-        <Row>
-          {ingredients.map(({ name, amount, amountUnit }) => (
-            <List type="unstyled" key={name}>
-              <li>
-                {amount} {amountUnit} - {name}
-              </li>
-              <Button onClick={() => handleRemoveIngredient(name)}>-</Button>
-            </List>
-          ))}
-        </Row>
+        <FormIngredientsList
+          ingredients={ingredients}
+          handleRemoveIngredient={handleRemoveIngredient}
+        />
       </Form>
     </Container>
   );
