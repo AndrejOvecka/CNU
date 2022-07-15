@@ -65,63 +65,90 @@ export function AddRecipePage() {
 
   return (
     <Container>
-      <h1>Přidat recept</h1>
-      <SubmitButton handleSubmit={() => handleSubmit()} />
       <Form>
+        <Row>
+          <Col lg={10}>
+            <h1>Přidat recept</h1>
+          </Col>
+          <Col lg={1}>
+            <SubmitButton handleSubmit={() => handleSubmit()} />
+          </Col>
+          <Col lg={1}>
+            <Button outline color="danger" onClick={() => navigate('/')}>
+              Zpět
+            </Button>
+          </Col>
+        </Row>
         <Row className="mt-4">
           <Col>
-            <Input
-              placeholder="Název receptu"
-              type="text"
-              value={recipe.title}
-              onChange={(e) => setRecipe({ ...recipe, title: e.target.value })}
-            />
+            <Row>
+              <Col>
+                <Input
+                  placeholder="Název receptu"
+                  type="text"
+                  value={recipe.title}
+                  onChange={(e) =>
+                    setRecipe({ ...recipe, title: e.target.value })
+                  }
+                />
+              </Col>
+              <Col>
+                <Input
+                  placeholder="Doba připravy min."
+                  value={recipe.preparationTime}
+                  type="number"
+                  onChange={(e) =>
+                    setRecipe({ ...recipe, preparationTime: e.target.value })
+                  }
+                />
+              </Col>
+            </Row>
+            <Row className="mt-4">
+              <h4>Přidat ingredienci</h4>
+            </Row>
+            <Row>
+              <Col lg={4}>
+                <Input
+                  placeholder="Ingredience"
+                  value={ingredientName}
+                  type="text"
+                  onChange={(e) => setIngredientName(e.target.value)}
+                />
+              </Col>
+              <Col lg={3}>
+                <Input
+                  placeholder="Množství"
+                  type="number"
+                  value={ingredientAmount}
+                  onChange={(e) => setIngredientAmount(e.target.value)}
+                />
+              </Col>
+              <Col lg={3}>
+                <Input
+                  placeholder="Jednotka"
+                  type="text"
+                  value={ingredientAmountUnit}
+                  onChange={(e) => setIngredientAmountUnit(e.target.value)}
+                />
+              </Col>
+              <Col lg={2}>
+                <Button onClick={() => handleAddIngredientsToRecipe()}>
+                  Přidat
+                </Button>
+              </Col>
+              <Row className="mt-4">
+                <FormIngredientsList
+                  ingredients={ingredients}
+                  handleRemoveIngredient={handleRemoveIngredient}
+                />
+              </Row>
+            </Row>
           </Col>
-          <Col>
-            <Input
-              placeholder="Doba připravy min."
-              value={recipe.preparationTime}
-              type="number"
-              onChange={(e) =>
-                setRecipe({ ...recipe, preparationTime: e.target.value })
-              }
-            />
-          </Col>
-        </Row>
-        <br />
-        <Row>
-          <Col>
-            <Input
-              placeholder="Ingredience"
-              value={ingredientName}
-              type="text"
-              onChange={(e) => setIngredientName(e.target.value)}
-            />
-          </Col>
-          <Col>
-            <Input
-              placeholder="Množství"
-              type="number"
-              value={ingredientAmount}
-              onChange={(e) => setIngredientAmount(e.target.value)}
-            />
-          </Col>
-          <Col>
-            <Input
-              placeholder="Jednotka"
-              type="text"
-              value={ingredientAmountUnit}
-              onChange={(e) => setIngredientAmountUnit(e.target.value)}
-            />
-          </Col>
-          <Button onClick={() => handleAddIngredientsToRecipe()}>+</Button>
-        </Row>
-        <br />
-        <Row>
           <Col>
             <Input
               placeholder="Postup"
               type="textarea"
+              rows="15"
               value={recipe.directions}
               onChange={(e) =>
                 setRecipe({ ...recipe, directions: e.target.value })
@@ -129,11 +156,6 @@ export function AddRecipePage() {
             />
           </Col>
         </Row>
-        <br />
-        <FormIngredientsList
-          ingredients={ingredients}
-          handleRemoveIngredient={handleRemoveIngredient}
-        />
       </Form>
     </Container>
   );
