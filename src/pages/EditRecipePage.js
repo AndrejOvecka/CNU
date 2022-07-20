@@ -5,13 +5,14 @@ import {
   Alert,
   Button,
   Container,
-  Input,
   Grid,
   Loader,
   Textarea,
   Title,
   TextInput,
   NumberInput,
+  ScrollArea,
+  Autocomplete,
 } from '@mantine/core';
 
 import { api } from '../api';
@@ -20,6 +21,7 @@ import { SubmitButton } from '../components/SubmitButton';
 import { BackButton } from '../components/BackButton';
 
 import useRecipe from '../hooks/useRecipe';
+import useIngredients from '../hooks/useIngredients';
 
 const { Col } = Grid;
 
@@ -37,6 +39,11 @@ export function EditRecipePage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { isLoading, recipe, hasError } = useRecipe(`/recipes/${id}`);
+  const {
+    ingredientsList,
+    hasError: ingredientsListError,
+    isLoading: ingredientsListIsLoading,
+  } = useIngredients();
 
   useEffect(() => {
     if (recipe) {
@@ -102,95 +109,96 @@ export function EditRecipePage() {
 
   return (
     <Container size="xl">
-      <form>
-        <Grid>
-          <Col span={10}>
-            <Title order={1} align="left">
-              {title}
-            </Title>
-          </Col>
-          <Col span={1}>
-            <SubmitButton handleSubmit={() => handleSubmit()} />
-          </Col>
-          <Col span={1}>
-            <BackButton text={'Zpět'} url={`/recipes/${id}`} />
-          </Col>
-        </Grid>
-        <Grid justify="space-between" my={30}>
-          <Col span={5}>
-            <TextInput
-              value={newTitle}
-              label="Název receptu"
-              onChange={(e) => setNewTitle(e.currentTarget.value)}
-            />
-            <Grid pt={15}>
-              <Col span={6}>
-                <TextInput
-                  value={newSideDish}
-                  label="Příloha"
-                  onChange={(e) => setNewSideDish(e.currentTarget.value)}
-                />
-              </Col>
-              <Col span={6}>
-                <TextInput
-                  label="Doba připravy min."
-                  value={newPreparationTime}
-                  onChange={(e) => setNewPreparationTime(e.currentTarget.value)}
-                />
-              </Col>
-            </Grid>
-            <Title order={3} mt={30} mb={10}>
-              Přidat ingredienci
-            </Title>
-            <Grid>
-              <Col span={4}>
-                <TextInput
-                  placeholder="Nazev ingredience"
-                  value={ingredientName}
-                  type="text"
-                  onChange={(e) => setIngredientName(e.currentTarget.value)}
-                />
-              </Col>
-              <Col span={3}>
-                <NumberInput
-                  placeholder="Množství"
-                  min={0}
-                  value={ingredientAmount}
-                  onChange={(val) => setIngredientAmount(val)}
-                />
-              </Col>
-              <Col span={3}>
-                <TextInput
-                  placeholder="Jednotka"
-                  type="text"
-                  value={ingredientAmountUnit}
-                  onChange={(e) =>
-                    setIngredientAmountUnit(e.currentTarget.value)
-                  }
-                />
-              </Col>
-              <Col span={2}>
-                <Button onClick={() => handleAddIngredient()}>Přidat</Button>
-              </Col>
-            </Grid>
-            <Grid mt={30}>
-              <IngredientsForm
-                ingredients={newIngredients}
-                handleRemoveIngredient={handleRemoveIngredient}
+      <Grid>
+        <Col span={10}>
+          <Title order={1} align="left">
+            {title}
+          </Title>
+        </Col>
+        <Col span={1}>
+          <SubmitButton handleSubmit={() => handleSubmit()} />
+        </Col>
+        <Col span={1}>
+          <BackButton text={'Zpět'} url={`/recipes/${id}`} />
+        </Col>
+      </Grid>
+      <Grid justify="space-between" my={30}>
+        <Col span={5}>
+          <TextInput
+            value={newTitle}
+            label="Název receptu"
+            onChange={(e) => setNewTitle(e.currentTarget.value)}
+          />
+          <Grid pt={15}>
+            <Col span={6}>
+              <TextInput
+                value={newSideDish}
+                label="Příloha"
+                onChange={(e) => setNewSideDish(e.currentTarget.value)}
               />
-            </Grid>
-          </Col>
-          <Col span={6}>
-            <Textarea
-              placeholder="Postup"
-              size="md"
-              autosize
-              value={newDirections}
-              onChange={(e) => setNewDirections(e.target.value)}
-            />
-          </Col>
-        </Grid>
-      </form>
+            </Col>
+            <Col span={6}>
+              <TextInput
+                label="Doba připravy min."
+                value={newPreparationTime}
+                onChange={(e) => setNewPreparationTime(e.currentTarget.value)}
+              />
+            </Col>
+          </Grid>
+          <Title order={3} mt={30} mb={10}>
+            Přidat ingredienci
+          </Title>
+          <Grid>
+            <Col span={4}>
+              <Autocomplete
+                placeholder="Nazev ingredience"
+                value={ingredientName}
+                type="text"
+                onChange={setIngredientName}
+                data={ingredientsList}
+              />
+            </Col>
+            <Col span={3}>
+              <NumberInput
+                placeholder="Množství"
+                min={0}
+                value={ingredientAmount}
+                onChange={(val) => setIngredientAmount(val)}
+              />
+            </Col>
+            <Col span={3}>
+              <TextInput
+                placeholder="Jednotka"
+                type="text"
+                value={ingredientAmountUnit}
+                onChange={(e) => setIngredientAmountUnit(e.currentTarget.value)}
+              />
+            </Col>
+            <Col span={2}>
+              <Button onClick={() => handleAddIngredient()}>Přidat</Button>
+            </Col>
+          </Grid>
+          <Grid mt={30}>
+            <ScrollArea style={{ height: 250, width: 1000 }}>
+              <Col span={11}>
+                <IngredientsForm
+                  ingredients={newIngredients}
+                  handleRemoveIngredient={handleRemoveIngredient}
+                />
+              </Col>
+            </ScrollArea>
+          </Grid>
+        </Col>
+        <Col span={6}>
+          <Textarea
+            placeholder="Postup"
+            size="md"
+            autosize
+            value={newDirections}
+            onChange={(e) => setNewDirections(e.target.value)}
+          />
+        </Col>
+      </Grid>
     </Container>
   );
 }

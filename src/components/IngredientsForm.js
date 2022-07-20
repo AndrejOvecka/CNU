@@ -1,4 +1,3 @@
-//import { Button, Col, List, Row } from 'reactstrap';
 import { Button, Text, Grid, Divider } from '@mantine/core';
 import { Trash } from 'tabler-icons-react';
 
@@ -19,8 +18,8 @@ export function IngredientsForm({ ingredients, handleRemoveIngredient }) {
         </Col>
       </Grid>
       <Divider />
-      {ingredients.map(({ name, amount, amountUnit }) => (
-        <Grid key={name} mt={5}>
+      {ingredients.map(({ _id, name, amount, amountUnit }) => (
+        <Grid key={_id} mt={5}>
           <Col span={2}>{amount}</Col>
           <Col span={2}>{amountUnit}</Col>
           <Col span={7}>{name}</Col>

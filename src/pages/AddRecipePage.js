@@ -1,11 +1,24 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { Col, Container, Form, Input, Row } from 'reactstrap';
-import { Button } from '@mantine/core';
+import {
+  Container,
+  Button,
+  Grid,
+  Title,
+  TextInput,
+  NumberInput,
+  Textarea,
+  ScrollArea,
+  Autocomplete,
+} from '@mantine/core';
 import { api } from '../api';
 import { IngredientsForm } from '../components/IngredientsForm';
 import { SubmitButton } from '../components/SubmitButton';
+import { BackButton } from '../components/BackButton';
+import useIngredients from '../hooks/useIngredients';
+
+const { Col } = Grid;
 
 export function AddRecipePage() {
   const [error, setError] = useState(false);
@@ -17,8 +30,11 @@ export function AddRecipePage() {
     title: '',
     preparationTime: '',
     directions: '',
+    sideDish: '',
     ingredients: [],
   });
+
+  const { ingredientsList, hasError, isLoading } = useIngredients();
 
   const navigate = useNavigate();
 
@@ -30,7 +46,7 @@ export function AddRecipePage() {
     });
 
     setIngredientName('');
-    setIngredientAmount('');
+    setIngredientAmount();
     setIngredientAmountUnit('');
   };
 
@@ -68,99 +84,106 @@ export function AddRecipePage() {
   };
 
   return (
-    <Container>
-      <Form>
-        <Row>
-          <Col lg={10}>
-            <h1>Přidat recept</h1>
-          </Col>
-          <Col lg={1}>
-            <SubmitButton handleSubmit={() => handleSubmit()} />
-          </Col>
-          <Col lg={1}>
-            <Button variant="outline" color="red" onClick={() => navigate('/')}>
-              Zpět
-            </Button>
-          </Col>
-        </Row>
-        <Row className="mt-4">
-          <Col>
-            <Row>
-              <Col>
-                <Input
-                  placeholder="Název receptu"
-                  type="text"
-                  value={recipe.title}
-                  onChange={(e) =>
-                    setRecipe({ ...recipe, title: e.target.value })
-                  }
-                />
-              </Col>
-              <Col>
-                <Input
-                  placeholder="Doba připravy min."
-                  value={recipe.preparationTime}
-                  type="number"
-                  onChange={(e) =>
-                    setRecipe({ ...recipe, preparationTime: e.target.value })
-                  }
-                />
-              </Col>
-            </Row>
-            <Row className="mt-4">
-              <h4>Přidat ingredienci</h4>
-            </Row>
-            <Row>
-              <Col lg={4}>
-                <Input
-                  placeholder="Ingredience"
-                  value={ingredientName}
-                  type="text"
-                  onChange={(e) => setIngredientName(e.target.value)}
-                />
-              </Col>
-              <Col lg={3}>
-                <Input
-                  placeholder="Množství"
-                  type="number"
-                  value={ingredientAmount}
-                  onChange={(e) => setIngredientAmount(e.target.value)}
-                />
-              </Col>
-              <Col lg={3}>
-                <Input
-                  placeholder="Jednotka"
-                  type="text"
-                  value={ingredientAmountUnit}
-                  onChange={(e) => setIngredientAmountUnit(e.target.value)}
-                />
-              </Col>
-              <Col lg={2}>
-                <Button onClick={() => handleAddIngredientsToRecipe()}>
-                  Přidat
-                </Button>
-              </Col>
-              <Row className="mt-4">
+    <Container size="xl">
+      <Grid>
+        <Col span={10}>
+          <Title order={1} align="left">
+            Přidat recept
+          </Title>
+        </Col>
+        <Col span={1}>
+          <SubmitButton handleSubmit={() => handleSubmit()} />
+        </Col>
+        <Col span={1}>
+          <BackButton text={'Zpět'} url={`/`} />
+        </Col>
+      </Grid>
+      <Grid justify="space-between" my={30}>
+        <Col span={5}>
+          <TextInput
+            label="Název receptu"
+            placeholder="Název receptu"
+            value={recipe.title}
+            onChange={(e) => setRecipe({ ...recipe, title: e.target.value })}
+          />
+          <Grid pt={15}>
+            <Col span={6}>
+              <TextInput
+                value={recipe.sideDish}
+                label="Příloha"
+                placeholder="Příloha"
+                onChange={(e) =>
+                  setRecipe({ ...recipe, sideDish: e.target.value })
+                }
+              />
+            </Col>
+            <Col span={6}>
+              <TextInput
+                placeholder="Doba připravy min."
+                label="Doba připravy min."
+                value={recipe.preparationTime}
+                onChange={(e) =>
+                  setRecipe({ ...recipe, preparationTime: e.target.value })
+                }
+              />
+            </Col>
+          </Grid>
+          <Title order={3} mt={30} mb={10}>
+            Přidat ingredienci
+          </Title>
+          <Grid>
+            <Col span={4}>
+              <Autocomplete
+                placeholder="Ingredience"
+                value={ingredientName}
+                onChange={setIngredientName}
+                data={ingredientsList}
+              />
+            </Col>
+            <Col span={3}>
+              <NumberInput
+                placeholder="Množství"
+                min={0}
+                value={ingredientAmount}
+                onChange={(val) => setIngredientAmount(val)}
+              />
+            </Col>
+            <Col span={3}>
+              <TextInput
+                placeholder="Jednotka"
+                value={ingredientAmountUnit}
+                onChange={(e) => setIngredientAmountUnit(e.target.value)}
+              />
+            </Col>
+            <Col span={2}>
+              <Button onClick={() => handleAddIngredientsToRecipe()}>
+                Přidat
+              </Button>
+            </Col>
+          </Grid>
+          <Grid mt={30}>
+            <ScrollArea style={{ height: 250, width: 1000 }}>
+              <Col span={11}>
                 <IngredientsForm
                   ingredients={ingredients}
                   handleRemoveIngredient={handleRemoveIngredient}
                 />
-              </Row>
-            </Row>
-          </Col>
-          <Col>
-            <Input
-              placeholder="Postup"
-              type="textarea"
-              rows="15"
-              value={recipe.directions}
-              onChange={(e) =>
-                setRecipe({ ...recipe, directions: e.target.value })
-              }
-            />
-          </Col>
-        </Row>
-      </Form>
+              </Col>
+            </ScrollArea>
+          </Grid>
+        </Col>
+        <Col span={6}>
+          <Textarea
+            placeholder="Postup"
+            size="md"
+            autosize
+            value={recipe.directions}
+            onChange={(e) =>
+              setRecipe({ ...recipe, directions: e.target.value })
+            }
+          />
+        </Col>
+      </Grid>
     </Container>
   );
 }
