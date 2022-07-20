@@ -1,11 +1,14 @@
 import { useEffect, useState } from 'react';
-import { Container, Spinner, Alert, Row, Button, Col } from 'reactstrap';
 import { useNavigate } from 'react-router-dom';
+import { Grid, Container, Button, Select, Loader } from '@mantine/core';
 
 import { SearchInput } from '../components/SearchInput';
 import { RecipesList } from '../components/RecipesList';
+import { AlertBar } from '../components/AlertBar';
 import useRecipes from '../hooks/useRecipes';
 import removeAccents from '../utils/removeAccents';
+
+const { Col } = Grid;
 
 export function RecipeListPage() {
   const [searchValue, setSearchValue] = useState('');
@@ -46,22 +49,22 @@ export function RecipeListPage() {
   }, [sortType]);
 
   return (
-    <Container>
-      <Row>
-        <Col lg={2}>
+    <Container size="xl">
+      <Grid>
+        <Col span={6}>
           <h1>Recepty</h1>
         </Col>
-        <Col>
+        <Col span={6} align="right">
           <Button
-            color="success"
-            size="sm"
+            size="md"
+            color="green"
             onClick={() => navigate('/recipe/add')}
           >
             Přidat recept
           </Button>
         </Col>
-      </Row>
-      <Row>
+      </Grid>
+      <Grid>
         <Col lg={10}>
           <SearchInput
             className="mb-4"
@@ -70,19 +73,19 @@ export function RecipeListPage() {
           />
         </Col>
         <Col lg={2}>
-          <Row>
-            <span>Seřadit podle</span>
-            <select onChange={(e) => setSortType(e.target.value)}>
-              <option value="title">Abecedy</option>
-              <option value="preparationTime">Čas přípravy</option>
-            </select>
-          </Row>
+          <Select
+            placeholder="Seřadit podle"
+            size="md"
+            onChange={setSortType}
+            data={[
+              { value: 'title', label: 'Abecedy' },
+              { value: 'preparationTime', label: 'Času přípravy' },
+            ]}
+          />
         </Col>
-      </Row>
-      {isLoading && <Spinner className="mb-4" />}
-      {hasError && (
-        <Alert color="danger">Vyskytla se chyba při načítání dat</Alert>
-      )}
+      </Grid>
+      {isLoading && <Loader className="mb-4" />}
+      {hasError && <AlertBar message="Vyskytla se chyba při načítání dat" />}
       <RecipesList recipes={data} />
     </Container>
   );

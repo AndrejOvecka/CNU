@@ -1,13 +1,15 @@
+import { List } from '@mantine/core';
+
 import splitDirections from '../utils/splitDirections';
 
 export function Direcions({ directions }) {
   return (
-    <ol>
+    <List type="ordered">
       {splitDirections(directions).map((id) => (
-        <li key={id} lg={3} md={4} sm={6} xs={12}>
+        <List.Item key={id} lg={3} md={4} sm={6} xs={12}>
           {id}
-        </li>
+        </List.Item>
       ))}
-    </ol>
+    </List>
   );
 }

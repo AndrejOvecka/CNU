@@ -1,25 +1,26 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { Button, Col, Container, Form, Input, List, Row } from 'reactstrap';
+import { Col, Container, Form, Input, Row } from 'reactstrap';
+import { Button } from '@mantine/core';
 import { api } from '../api';
-import { FormIngredientsList } from '../components/FormIngredientsList';
+import { IngredientsForm } from '../components/IngredientsForm';
 import { SubmitButton } from '../components/SubmitButton';
 
 export function AddRecipePage() {
   const [error, setError] = useState(false);
-  const navigate = useNavigate();
   const [ingredients, setIngredients] = useState([]);
   const [ingredientName, setIngredientName] = useState('');
   const [ingredientAmount, setIngredientAmount] = useState('');
   const [ingredientAmountUnit, setIngredientAmountUnit] = useState('');
-
   const [recipe, setRecipe] = useState({
     title: '',
     preparationTime: '',
     directions: '',
     ingredients: [],
   });
+
+  const navigate = useNavigate();
 
   const handleAddIngredient = () => {
     ingredients.push({
@@ -51,15 +52,18 @@ export function AddRecipePage() {
   const handleSubmit = async () => {
     if (recipe.title.trim().length !== 0) {
       try {
-        await api.post(`/recipes`, recipe);
-        toast.success('Recept byl úspěšně vytvořen');
-        navigate('/');
+        const response = await api.post(`/recipes`, recipe);
+        if (response && response.data) {
+          const id = response.data._id;
+          navigate(`/recipes/${id}`);
+        }
+        toast.success('Recept byl úspěšně vytvořen!');
       } catch (errorMessage) {
         setError(true);
-        toast.error(error);
+        toast.error('Něco se nepovedlo.');
       }
     } else {
-      toast.error('Název je povinné pole');
+      toast.error('Název je povinné pole!');
     }
   };
 
@@ -74,7 +78,7 @@ export function AddRecipePage() {
             <SubmitButton handleSubmit={() => handleSubmit()} />
           </Col>
           <Col lg={1}>
-            <Button outline color="danger" onClick={() => navigate('/')}>
+            <Button variant="outline" color="red" onClick={() => navigate('/')}>
               Zpět
             </Button>
           </Col>
@@ -137,7 +141,7 @@ export function AddRecipePage() {
                 </Button>
               </Col>
               <Row className="mt-4">
-                <FormIngredientsList
+                <IngredientsForm
                   ingredients={ingredients}
                   handleRemoveIngredient={handleRemoveIngredient}
                 />

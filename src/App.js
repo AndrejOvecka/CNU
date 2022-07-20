@@ -10,7 +10,7 @@ export function App() {
       <Layout>
         <Routes />
       </Layout>
-      <ToastContainer />
+      <ToastContainer theme="colored" hideProgressBar />
     </Router>
   );
 }

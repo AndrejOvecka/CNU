@@ -4,33 +4,39 @@ import { toast } from 'react-toastify';
 import {
   Alert,
   Button,
-  Col,
   Container,
-  Form,
   Input,
-  Row,
-  Spinner,
-} from 'reactstrap';
+  Grid,
+  Loader,
+  Textarea,
+  Title,
+  TextInput,
+  NumberInput,
+} from '@mantine/core';
+
 import { api } from '../api';
-import { FormIngredientsList } from '../components/FormIngredientsList';
+import { IngredientsForm } from '../components/IngredientsForm';
 import { SubmitButton } from '../components/SubmitButton';
+import { BackButton } from '../components/BackButton';
 
 import useRecipe from '../hooks/useRecipe';
 
+const { Col } = Grid;
+
 export function EditRecipePage() {
   const [error, setError] = useState(false);
-  const { id } = useParams();
-  const navigate = useNavigate();
-
-  const { isLoading, recipe, hasError } = useRecipe(`/recipes/${id}`);
-
   const [newTitle, setNewTitle] = useState('');
   const [newPreparationTime, setNewPreparationTime] = useState('');
+  const [newSideDish, setNewSideDish] = useState('');
   const [newDirections, setNewDirections] = useState('');
   const [newIngredients, setNewIngredients] = useState([]);
   const [ingredientName, setIngredientName] = useState('');
   const [ingredientAmount, setIngredientAmount] = useState('');
   const [ingredientAmountUnit, setIngredientAmountUnit] = useState('');
+
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const { isLoading, recipe, hasError } = useRecipe(`/recipes/${id}`);
 
   useEffect(() => {
     if (recipe) {
@@ -38,11 +44,12 @@ export function EditRecipePage() {
       setNewDirections(recipe.directions);
       setNewPreparationTime(recipe.preparationTime);
       setNewIngredients(recipe.ingredients);
+      setNewSideDish(recipe.sideDish);
     }
   }, [recipe]);
 
   if (isLoading) {
-    return <Spinner />;
+    return <Loader />;
   }
 
   if (hasError) {
@@ -63,15 +70,16 @@ export function EditRecipePage() {
         preparationTime: newPreparationTime,
         directions: newDirections,
         ingredients: newIngredients,
+        sideDish: newSideDish,
       };
 
       await api.post(`/recipes/${id}`, newRecipe);
-      toast.success('Recept byl upraven');
+      toast.success('Recept byl upraven! 🥳');
+      navigate(`/recipes/${id}`);
     } catch (errorMessage) {
       setError(true);
       toast.error(error);
     }
-    navigate('/');
   };
 
   const handleAddIngredient = () => {
@@ -87,167 +95,102 @@ export function EditRecipePage() {
   };
 
   const handleRemoveIngredient = (name) => {
-    console.log('Funkcia sa zvolala');
     setNewIngredients(
       newIngredients.filter((ingredient) => ingredient.name !== name),
     );
   };
 
   return (
-    <Container>
-      <Form>
-        <Row>
-          <Col lg={10}>
-            <h1>{title}</h1>
+    <Container size="xl">
+      <form>
+        <Grid>
+          <Col span={10}>
+            <Title order={1} align="left">
+              {title}
+            </Title>
           </Col>
-          <Col lg={1}>
+          <Col span={1}>
             <SubmitButton handleSubmit={() => handleSubmit()} />
           </Col>
-          <Col lg={1}>
-            <Button
-              outline
-              color="danger"
-              onClick={() => navigate(`/recipes/${id}`)}
-            >
-              Zpět
-            </Button>
+          <Col span={1}>
+            <BackButton text={'Zpět'} url={`/recipes/${id}`} />
           </Col>
-        </Row>
-        <Row className="mt-4">
-          <Col>
-            <Row>
-              <Col>
-                <Input
-                  type="text"
-                  value={newTitle}
-                  onChange={(e) => setNewTitle(e.target.value)}
+        </Grid>
+        <Grid justify="space-between" my={30}>
+          <Col span={5}>
+            <TextInput
+              value={newTitle}
+              label="Název receptu"
+              onChange={(e) => setNewTitle(e.currentTarget.value)}
+            />
+            <Grid pt={15}>
+              <Col span={6}>
+                <TextInput
+                  value={newSideDish}
+                  label="Příloha"
+                  onChange={(e) => setNewSideDish(e.currentTarget.value)}
                 />
               </Col>
-              <Col>
-                <Input
-                  placeholder="Doba připravy min."
+              <Col span={6}>
+                <TextInput
+                  label="Doba připravy min."
                   value={newPreparationTime}
-                  type="number"
-                  onChange={(e) => setNewPreparationTime(e.target.value)}
+                  onChange={(e) => setNewPreparationTime(e.currentTarget.value)}
                 />
               </Col>
-            </Row>
-            <Row className="mt-4">
-              <h4>Přidat ingredienci</h4>
-            </Row>
-            <Row>
-              <Col lg={4}>
-                <Input
+            </Grid>
+            <Title order={3} mt={30} mb={10}>
+              Přidat ingredienci
+            </Title>
+            <Grid>
+              <Col span={4}>
+                <TextInput
                   placeholder="Nazev ingredience"
                   value={ingredientName}
                   type="text"
-                  onChange={(e) => setIngredientName(e.target.value)}
+                  onChange={(e) => setIngredientName(e.currentTarget.value)}
                 />
               </Col>
-              <Col lg={3}>
-                <Input
+              <Col span={3}>
+                <NumberInput
                   placeholder="Množství"
-                  type="number"
+                  min={0}
                   value={ingredientAmount}
-                  onChange={(e) => setIngredientAmount(e.target.value)}
+                  onChange={(val) => setIngredientAmount(val)}
                 />
               </Col>
-              <Col lg={3}>
-                <Input
+              <Col span={3}>
+                <TextInput
                   placeholder="Jednotka"
                   type="text"
                   value={ingredientAmountUnit}
-                  onChange={(e) => setIngredientAmountUnit(e.target.value)}
+                  onChange={(e) =>
+                    setIngredientAmountUnit(e.currentTarget.value)
+                  }
                 />
               </Col>
-              <Col lg={2}>
+              <Col span={2}>
                 <Button onClick={() => handleAddIngredient()}>Přidat</Button>
               </Col>
-              <Row className="mt-4">
-                <FormIngredientsList
-                  ingredients={newIngredients}
-                  handleRemoveIngredient={handleRemoveIngredient}
-                />
-              </Row>
-            </Row>
+            </Grid>
+            <Grid mt={30}>
+              <IngredientsForm
+                ingredients={newIngredients}
+                handleRemoveIngredient={handleRemoveIngredient}
+              />
+            </Grid>
           </Col>
-          <Col>
-            <Input
+          <Col span={6}>
+            <Textarea
               placeholder="Postup"
-              type="textarea"
-              rows="15"
+              size="md"
+              autosize
               value={newDirections}
               onChange={(e) => setNewDirections(e.target.value)}
             />
           </Col>
-        </Row>
-      </Form>
-      {/* <h1>Upravit recept</h1>
-      <Button onClick={() => handleSubmit()}>Uložit</Button>
-      <Form>
-        <Row className="mt-4">
-          <Col>
-            <Input
-              type="text"
-              value={newTitle}
-              onChange={(e) => setNewTitle(e.target.value)}
-            />
-          </Col>
-          <Col>
-            <Input
-              placeholder="Doba připravy min."
-              value={newPreparationTime}
-              type="number"
-              onChange={(e) => setNewPreparationTime(e.target.value)}
-            />
-          </Col>
-        </Row>
-        <br />
-        <Row>
-          <p>Ingredience</p>
-          <Col>
-            <Input
-              placeholder="Nazev ingredience"
-              value={ingredientName}
-              type="text"
-              onChange={(e) => setIngredientName(e.target.value)}
-            />
-          </Col>
-          <Col>
-            <Input
-              placeholder="Množství"
-              type="number"
-              value={ingredientAmount}
-              onChange={(e) => setIngredientAmount(e.target.value)}
-            />
-          </Col>
-          <Col>
-            <Input
-              placeholder="Jednotka"
-              type="text"
-              value={ingredientAmountUnit}
-              onChange={(e) => setIngredientAmountUnit(e.target.value)}
-            />
-          </Col>
-          <Button onClick={() => handleAddIngredient()}>+</Button>
-        </Row>
-        <br />
-        <Row>
-          <Col>
-            <Input
-              placeholder="Postup"
-              type="textarea"
-              value={newDirections}
-              onChange={(e) => setNewDirections(e.target.value)}
-            />
-          </Col>
-        </Row>
-        <br />
-        <FormIngredientsList
-          ingredients={newIngredients}
-          handleRemoveIngredient={handleRemoveIngredient}
-        />
-      </Form> */}
+        </Grid>
+      </form>
     </Container>
   );
 }

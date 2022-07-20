@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { api } from '../api';
 
 const useRecipe = (url) => {
-  const [recipe, setRecipe] = useState(null);
+  const [recipe, setRecipe] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
 

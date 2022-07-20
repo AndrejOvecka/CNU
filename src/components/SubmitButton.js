@@ -1,8 +1,8 @@
-import { Button } from 'reactstrap';
+import { Button } from '@mantine/core';
 
 export function SubmitButton({ handleSubmit }) {
   return (
-    <Button color="success" onClick={() => handleSubmit()}>
+    <Button color="green" onClick={() => handleSubmit()}>
       Uložit
     </Button>
   );

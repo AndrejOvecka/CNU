@@ -1,25 +1,32 @@
 import { useState } from 'react';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Button, Modal, Group } from '@mantine/core';
 
 export function DeleteRecipeButton({ title, ...props }) {
   const [showModal, setShowModal] = useState(false);
 
   return (
-    <div className="mt-2 mb-3">
-      <Button className="btn btn-danger " onClick={() => setShowModal(true)}>
-        Smazat recept
+    <div className="mb-3">
+      <Button color="red" onClick={() => setShowModal(true)}>
+        Smazat
       </Button>
-      <Modal isOpen={showModal}>
-        <ModalHeader>Smazat recept</ModalHeader>
-        <ModalBody>Opravdu chcete smazat recept {title}?</ModalBody>
-        <ModalFooter>
-          <Button color="primary" {...props}>
-            Smazat
-          </Button>
-          <Button outline color="danger" onClick={() => setShowModal(false)}>
+      <Modal
+        transition="fade"
+        transitionDuration={600}
+        transitionTimingFunction="ease"
+        opened={showModal}
+        onClose={() => setShowModal(false)}
+        title={`Opravdu chcete smazat recept ${title}?`}
+      >
+        <Group>
+          <Button {...props}>Smazat</Button>
+          <Button
+            variant="outline"
+            color="red"
+            onClick={() => setShowModal(false)}
+          >
             Zrušit
           </Button>
-        </ModalFooter>
+        </Group>
       </Modal>
     </div>
   );
