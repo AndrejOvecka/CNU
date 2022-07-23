@@ -11,6 +11,7 @@ import {
   Textarea,
   ScrollArea,
   Autocomplete,
+  Checkbox,
 } from '@mantine/core';
 import { api } from '../api';
 import { IngredientsForm } from '../components/IngredientsForm';
@@ -22,6 +23,7 @@ const { Col } = Grid;
 
 export function AddRecipePage() {
   const [error, setError] = useState(false);
+  const [isGroup, setIsGroup] = useState(false);
   const [ingredients, setIngredients] = useState([]);
   const [ingredientName, setIngredientName] = useState('');
   const [ingredientAmount, setIngredientAmount] = useState('');
@@ -43,11 +45,13 @@ export function AddRecipePage() {
       name: ingredientName,
       amount: ingredientAmount,
       amountUnit: ingredientAmountUnit,
+      isGroup: isGroup,
     });
 
     setIngredientName('');
     setIngredientAmount();
     setIngredientAmountUnit('');
+    setIsGroup(false);
   };
 
   const handleAddIngredientsToRecipe = () => {
@@ -132,9 +136,18 @@ export function AddRecipePage() {
             Přidat ingredienci
           </Title>
           <Grid>
+            <Col>
+              <Checkbox
+                checked={isGroup}
+                label="Přidat skupinu"
+                onChange={(e) => setIsGroup(e.currentTarget.checked)}
+              />
+            </Col>
+          </Grid>
+          <Grid>
             <Col span={4}>
               <Autocomplete
-                placeholder="Ingredience"
+                placeholder="Název"
                 value={ingredientName}
                 onChange={setIngredientName}
                 data={ingredientsList}
@@ -144,6 +157,7 @@ export function AddRecipePage() {
               <NumberInput
                 placeholder="Množství"
                 min={0}
+                disabled={isGroup}
                 value={ingredientAmount}
                 onChange={(val) => setIngredientAmount(val)}
               />
@@ -151,6 +165,7 @@ export function AddRecipePage() {
             <Col span={3}>
               <TextInput
                 placeholder="Jednotka"
+                disabled={isGroup}
                 value={ingredientAmountUnit}
                 onChange={(e) => setIngredientAmountUnit(e.target.value)}
               />
@@ -162,14 +177,12 @@ export function AddRecipePage() {
             </Col>
           </Grid>
           <Grid mt={30}>
-            <ScrollArea style={{ height: 250, width: 1000 }}>
-              <Col span={11}>
-                <IngredientsForm
-                  ingredients={ingredients}
-                  handleRemoveIngredient={handleRemoveIngredient}
-                />
-              </Col>
-            </ScrollArea>
+            <Col span={11}>
+              <IngredientsForm
+                ingredients={ingredients}
+                handleRemoveIngredient={handleRemoveIngredient}
+              />
+            </Col>
           </Grid>
         </Col>
         <Col span={6}>
@@ -177,6 +190,7 @@ export function AddRecipePage() {
             placeholder="Postup"
             size="md"
             autosize
+            minRows={10.3}
             value={recipe.directions}
             onChange={(e) =>
               setRecipe({ ...recipe, directions: e.target.value })

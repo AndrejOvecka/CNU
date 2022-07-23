@@ -13,6 +13,7 @@ import {
   NumberInput,
   ScrollArea,
   Autocomplete,
+  Checkbox,
 } from '@mantine/core';
 
 import { api } from '../api';
@@ -28,6 +29,7 @@ const { Col } = Grid;
 export function EditRecipePage() {
   const [error, setError] = useState(false);
   const [newTitle, setNewTitle] = useState('');
+  const [isGroup, setIsGroup] = useState(false);
   const [newPreparationTime, setNewPreparationTime] = useState('');
   const [newSideDish, setNewSideDish] = useState('');
   const [newDirections, setNewDirections] = useState('');
@@ -94,11 +96,13 @@ export function EditRecipePage() {
       name: ingredientName,
       amount: ingredientAmount,
       amountUnit: ingredientAmountUnit,
+      isGroup: isGroup,
     });
 
     setIngredientName('');
     setIngredientAmount('');
     setIngredientAmountUnit('');
+    setIsGroup(false);
   };
 
   const handleRemoveIngredient = (name) => {
@@ -149,9 +153,18 @@ export function EditRecipePage() {
             Přidat ingredienci
           </Title>
           <Grid>
+            <Col>
+              <Checkbox
+                checked={isGroup}
+                label="Přidat skupinu"
+                onChange={(e) => setIsGroup(e.currentTarget.checked)}
+              />
+            </Col>
+          </Grid>
+          <Grid>
             <Col span={4}>
               <Autocomplete
-                placeholder="Nazev ingredience"
+                placeholder="Nazev"
                 value={ingredientName}
                 type="text"
                 onChange={setIngredientName}
@@ -162,6 +175,7 @@ export function EditRecipePage() {
               <NumberInput
                 placeholder="Množství"
                 min={0}
+                disabled={isGroup}
                 value={ingredientAmount}
                 onChange={(val) => setIngredientAmount(val)}
               />
@@ -170,6 +184,7 @@ export function EditRecipePage() {
               <TextInput
                 placeholder="Jednotka"
                 type="text"
+                disabled={isGroup}
                 value={ingredientAmountUnit}
                 onChange={(e) => setIngredientAmountUnit(e.currentTarget.value)}
               />
@@ -179,14 +194,12 @@ export function EditRecipePage() {
             </Col>
           </Grid>
           <Grid mt={30}>
-            <ScrollArea style={{ height: 250, width: 1000 }}>
-              <Col span={11}>
-                <IngredientsForm
-                  ingredients={newIngredients}
-                  handleRemoveIngredient={handleRemoveIngredient}
-                />
-              </Col>
-            </ScrollArea>
+            <Col span={11}>
+              <IngredientsForm
+                ingredients={newIngredients}
+                handleRemoveIngredient={handleRemoveIngredient}
+              />
+            </Col>
           </Grid>
         </Col>
         <Col span={6}>

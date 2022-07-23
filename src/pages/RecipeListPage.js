@@ -40,8 +40,12 @@ export function RecipeListPage() {
         typeof a[sortProperty] === 'string' &&
         typeof b[sortProperty] === 'string'
           ? a[sortProperty].localeCompare(b[sortProperty])
-          : b[sortProperty] - a[sortProperty],
+          : (a[sortProperty] ? a[sortProperty] : 0) -
+            (b[sortProperty] ? b[sortProperty] : 0),
       );
+      sorted.map(({ preparationTime }) => {
+        console.log(preparationTime);
+      });
       setData(sorted);
     };
 
