@@ -1,10 +1,8 @@
-import { List } from '@mantine/core';
 import MarkdownView from 'react-showdown';
+import style from '../styles/showdown-styles.module.css';
 
 export function Direcions({ directions }) {
   return (
-    <List type="ordered">
-      <MarkdownView markdown={directions} />
-    </List>
+    <MarkdownView className={style.directionTitle} markdown={directions} />
   );
 }

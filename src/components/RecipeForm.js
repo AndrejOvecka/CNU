@@ -1,4 +1,5 @@
 import { useForm } from '@mantine/form';
+import { useParams, useNavigate } from 'react-router-dom';
 import {
   ActionIcon,
   Autocomplete,
@@ -23,6 +24,7 @@ const { Col } = Grid;
 export function RecipeForm({ initialForm, handleSubmit }) {
   const [, setIsGroup] = useState(false);
   const { ingredientsList, hasError, isLoading } = useIngredients();
+  const { id } = useParams();
 
   const form = useForm({
     initialValues: initialForm,
