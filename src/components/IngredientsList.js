@@ -1,53 +1,49 @@
-import {
-  List,
-  Checkbox,
-  Paper,
-  Group,
-  Text,
-  NumberInput,
-  Title,
-} from '@mantine/core';
-import { useState } from 'react';
-import { Carrot } from 'tabler-icons-react';
+import { Button, Text, Grid, Divider, ScrollArea } from '@mantine/core';
+import { Trash } from 'tabler-icons-react';
 
-export function IngredientsList({ ingredients, portions, setPortions }) {
+const { Col } = Grid;
+
+export function IngredientsList({ ingredients, handleRemoveIngredient }) {
   return (
-    <Paper shadow="md" p="lg" withBorder>
-      <Group spacing={5} mb={15}>
-        <Text>Počet porcí</Text>
-        <NumberInput
-          value={portions}
-          size="md"
-          min={1}
-          onChange={(val) => setPortions(val)}
-        />
-      </Group>
-      <List type="unordered" icon={<Carrot color="orange" />}>
-        {ingredients.map(({ _id, amount, amountUnit, name, isGroup }) => (
-          <div>
-            {!isGroup ? (
-              <Checkbox
-                size="md"
-                mb={15}
-                key={_id}
-                label={
-                  amount ? (
-                    <Text>
-                      {amount * portions} {amountUnit} - {name}{' '}
-                    </Text>
-                  ) : (
-                    <span>{name}</span>
-                  )
-                }
-              ></Checkbox>
-            ) : (
-              <Title order={4} mb={8}>
-                {name}
-              </Title>
-            )}
-          </div>
+    <Col>
+      <Grid>
+        <Col span={2}>
+          <Text>Množství</Text>
+        </Col>
+        <Col span={2}>
+          <Text>Jednotka</Text>
+        </Col>
+        <Col span={8}>
+          <Text>Název</Text>
+        </Col>
+      </Grid>
+
+      <Divider />
+      <ScrollArea style={{ height: 250, width: 470 }} offsetScrollbars>
+        {ingredients.map(({ _id, name, amount, amountUnit, isGroup }) => (
+          <Grid key={_id} mt={5}>
+            <Col span={2}>
+              <Text>{amount}</Text>
+            </Col>
+            <Col span={2}>
+              <Text>{amountUnit}</Text>
+            </Col>
+            <Col span={6}>
+              <Text weight={isGroup ? 700 : 400}>{name}</Text>
+            </Col>
+            <Col span={2}>
+              <Button
+                size="xs"
+                px={6}
+                color="red"
+                onClick={() => handleRemoveIngredient(name)}
+              >
+                <Trash color="white" size={20} strokeWidth={2} />
+              </Button>
+            </Col>
+          </Grid>
         ))}
-      </List>
-    </Paper>
+      </ScrollArea>
+    </Col>
   );
 }

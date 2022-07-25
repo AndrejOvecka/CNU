@@ -1,9 +1,9 @@
 import { Button } from '@mantine/core';
 
-export function SubmitButton({ handleSubmit }) {
+export function SubmitButton({ text }) {
   return (
-    <Button color="green" onClick={() => handleSubmit()}>
-      Uložit
+    <Button type="submit" color="green">
+      {text}
     </Button>
   );
 }

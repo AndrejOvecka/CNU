@@ -16,7 +16,7 @@ import { api } from '../api';
 
 import { DeleteRecipeButton } from '../components/DeleteRecipeButton';
 import { Direcions } from '../components/Directions';
-import { IngredientsList } from '../components/IngredientsList';
+import { IngredientsPaper } from '../components/IngredientsPaper';
 import useRecipe from '../hooks/useRecipe';
 import toHoursAndMinutes from '../utils/toHoursAndMinutes';
 import { AlertBar } from '../components/AlertBar';
@@ -97,7 +97,7 @@ export function RecipeDetailPage() {
       <Grid gutter="xl" justify="space-between" my={30}>
         <Col span={4}>
           {ingredients && ingredients.length > 0 && (
-            <IngredientsList
+            <IngredientsPaper
               ingredients={ingredients}
               portions={portions}
               setPortions={setPortions}

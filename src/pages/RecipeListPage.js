@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Grid, Container, Button, Select, Loader } from '@mantine/core';
+import { Grid, Button, Select, Loader } from '@mantine/core';
 
 import { SearchInput } from '../components/SearchInput';
 import { RecipesList } from '../components/RecipesList';
@@ -53,7 +53,7 @@ export function RecipeListPage() {
   }, [sortType]);
 
   return (
-    <Container size="xl">
+    <>
       <Grid>
         <Col span={6}>
           <h1>Recepty</h1>
@@ -91,6 +91,6 @@ export function RecipeListPage() {
       {isLoading && <Loader className="mb-4" />}
       {hasError && <AlertBar message="Vyskytla se chyba při načítání dat" />}
       <RecipesList recipes={data} />
-    </Container>
+    </>
   );
 }

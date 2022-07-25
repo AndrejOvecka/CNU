@@ -4,6 +4,7 @@ import { api } from '../api';
 
 const useRecipe = (url) => {
   const [recipe, setRecipe] = useState({});
+  const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
 
@@ -16,7 +17,7 @@ const useRecipe = (url) => {
         setRecipe(response.data);
         setIsLoading(false);
       })
-      .catch((error) => {
+      .catch(() => {
         setHasError(true);
       })
       .finally(() => {
@@ -24,7 +25,7 @@ const useRecipe = (url) => {
       });
   }, [url]);
 
-  return { isLoading, recipe, hasError };
+  return { isLoading, recipe, hasError, errorMessage };
 };
 
 export default useRecipe;
