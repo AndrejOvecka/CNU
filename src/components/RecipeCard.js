@@ -16,14 +16,14 @@ export function RecipeCard({ title, preparationTime, sideDish, _id }) {
         <Text weight={500} size="lg">
           {title}
         </Text>
-        <Group spacing="xs">
-          <Clock size={20} strokeWidth={2} color={'black'} />
-          <Text size="sm">
-            {preparationTime && (
+        {preparationTime && (
+          <Group spacing="xs">
+            <Clock size={20} strokeWidth={2} color={'black'} />
+            <Text size="sm">
               <span> {toHoursAndMinutes(preparationTime)}</span>
-            )}
-          </Text>
-        </Group>
+            </Text>
+          </Group>
+        )}
         <div className="mt-1">
           {sideDish && (
             <Badge>

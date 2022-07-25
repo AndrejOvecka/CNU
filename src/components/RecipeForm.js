@@ -6,7 +6,6 @@ import {
   Button,
   Checkbox,
   Grid,
-  Group,
   NumberInput,
   Textarea,
   TextInput,
@@ -22,11 +21,14 @@ import { BackButton } from './BackButton';
 const { Col } = Grid;
 
 export function RecipeForm({ initialForm, handleSubmit }) {
-  const [isGroup, setIsGroup] = useState(false);
+  const [, setIsGroup] = useState(false);
   const { ingredientsList, hasError, isLoading } = useIngredients();
 
   const form = useForm({
     initialValues: initialForm,
+    validate: (value) => ({
+      title: value.title.length < 1 ? 'Název je povinné pole' : null,
+    }),
   });
 
   return (
@@ -46,7 +48,6 @@ export function RecipeForm({ initialForm, handleSubmit }) {
         <Grid justify="space-between">
           <Col span={5}>
             <TextInput
-              required
               label="Název receptu"
               placeholder="Název receptu"
               {...form.getInputProps('title')}
@@ -74,15 +75,17 @@ export function RecipeForm({ initialForm, handleSubmit }) {
               <div key={item.key}>
                 <Grid>
                   <Col>
-                    <Checkbox
-                      label="Přidat skupinu"
-                      onChange={(e) => setIsGroup(e.currentTarget.checked)}
-                      {...form.getListInputProps(
-                        'ingredients',
-                        index,
-                        'isGroup',
-                      )}
-                    />
+                    {item.isGroup !== undefined && (
+                      <Checkbox
+                        label="Přidat skupinu"
+                        onChange={(e) => setIsGroup(e.currentTarget.checked)}
+                        {...form.getListInputProps(
+                          'ingredients',
+                          index,
+                          'isGroup',
+                        )}
+                      />
+                    )}
                   </Col>
                 </Grid>
                 <Grid>
@@ -161,126 +164,5 @@ export function RecipeForm({ initialForm, handleSubmit }) {
         </Grid>
       </form>
     </Box>
-
-    // <Box sx={{ maxWidth: 600 }} mx="auto">
-    //   <form onSubmit={form.onSubmit(handleSubmit)}>
-    //     <Grid>
-    //       <Col>
-    //         <Grid>
-    //           <Col>
-    //             <TextInput
-    //               required
-    //               label="Název receptu"
-    //               placeholder="Název receptu"
-    //               {...form.getInputProps('title')}
-    //             />
-    //             <Grid pt={15}>
-    //               <Col span={6}>
-    //                 <TextInput
-    //                   label="Příloha"
-    //                   placeholder="Příloha"
-    //                   {...form.getInputProps('sideDish')}
-    //                 />
-    //               </Col>
-    //               <Col span={6}>
-    //                 <TextInput
-    //                   placeholder="Doba připravy min."
-    //                   label="Doba připravy min."
-    //                   {...form.getInputProps('preparationTime')}
-    //                 />
-    //               </Col>
-    //             </Grid>
-    //           </Col>
-    //           <Col>
-    //             <Textarea
-    //               label="Postup"
-    //               placeholder="Postup"
-    //               size="sm"
-    //               autosize
-    //               minRows={18}
-    //               {...form.getInputProps('directions')}
-    //             />
-    //           </Col>
-    //         </Grid>
-    //       </Col>
-    //       <Col>
-    //         <Box>
-    //           <Title order={3} mt={30} mb={10}>
-    //             Přidat ingredienci
-    //           </Title>
-    //           {form.values.ingredients.map((item, index) => (
-    //             <div key={item.key}>
-    //               <Grid>
-    //                 <Col>
-    //                   <Checkbox
-    //                     label="Přidat skupinu"
-    //                     onChange={(e) => setIsGroup(e.currentTarget.checked)}
-    //                     {...form.getListInputProps(
-    //                       'ingredients',
-    //                       index,
-    //                       'isGroup',
-    //                     )}
-    //                   />
-    //                 </Col>
-    //               </Grid>
-    //               <Grid>
-    //                 <Col span={4}>
-    //                   <Autocomplete
-    //                     placeholder="Název"
-    //                     data={ingredientsList}
-    //                     {...form.getListInputProps(
-    //                       'ingredients',
-    //                       index,
-    //                       'name',
-    //                     )}
-    //                   />
-    //                 </Col>
-    //                 <Col span={3}>
-    //                   <NumberInput
-    //                     placeholder="Množství"
-    //                     min={0}
-    //                     disabled={item.isGroup}
-    //                     {...form.getListInputProps(
-    //                       'ingredients',
-    //                       index,
-    //                       'amount',
-    //                     )}
-    //                   />
-    //                 </Col>
-    //                 <Col span={3}>
-    //                   <TextInput
-    //                     placeholder="Jednotka"
-    //                     disabled={item.isGroup}
-    //                     {...form.getListInputProps(
-    //                       'ingredients',
-    //                       index,
-    //                       'amountUnit',
-    //                     )}
-    //                   />
-    //                 </Col>
-    //               </Grid>
-    //             </div>
-    //           ))}
-    //           <Button
-    //             onClick={() =>
-    //               form.addListItem('ingredients', {
-    //                 name: '',
-    //                 amount: '',
-    //                 amountUnit: '',
-    //                 isGroup: false,
-    //                 key: randomId(),
-    //               })
-    //             }
-    //           >
-    //             Přidat
-    //           </Button>
-    //         </Box>
-    //       </Col>
-    //       <Group position="right" mt="md">
-    //         <Button type="submit">Submit</Button>
-    //       </Group>
-    //     </Grid>
-    //   </form>
-    // </Box>
   );
 }

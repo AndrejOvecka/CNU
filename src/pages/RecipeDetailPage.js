@@ -25,7 +25,7 @@ import { Clock, Meat } from 'tabler-icons-react';
 const { Col } = Grid;
 
 export function RecipeDetailPage() {
-  const [error, setError] = useState(false);
+  const [error, setError] = useState('');
   const [portions, setPortions] = useState(1);
 
   const { id } = useParams();
@@ -37,11 +37,13 @@ export function RecipeDetailPage() {
       await api.delete(`/recipes/${id}`);
       toast.success('Recept byl smazán!');
       navigate('/');
-    } catch (errorMessage) {
-      setError(true);
-      toast.error('Něco se nepovedlo.');
+    } catch (error) {
+      setError(error);
+      toast.error(`Něco se nepovedlo: ${error}`);
     }
   };
+
+  console.log(error);
 
   if (isLoading && !recipe) {
     return <Loader />;
