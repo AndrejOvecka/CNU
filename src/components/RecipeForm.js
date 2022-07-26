@@ -61,7 +61,7 @@ export function RecipeForm({ initialForm, handleSubmit }) {
                 />
               </Col>
               <Col span={6}>
-                <TextInput
+                <NumberInput
                   placeholder="Doba připravy min."
                   label="Doba připravy min."
                   {...form.getInputProps('preparationTime')}
