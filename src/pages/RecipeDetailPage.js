@@ -27,8 +27,8 @@ export function RecipeDetailPage() {
       await api.delete(`/recipes/${id}`);
       toast.success('Recept byl smazán!');
       navigate('/');
-    } catch (error) {
-      setError(error);
+    } catch (errorMessage) {
+      setError(errorMessage);
       toast.error(`Něco se nepovedlo: ${error}`);
     }
   };
@@ -41,8 +41,6 @@ export function RecipeDetailPage() {
     sideDish,
     servingCount,
   } = recipe;
-
-  console.log('poritons 1: ' + servingCount);
 
   if (isLoading && !recipe) {
     return <Loader />;

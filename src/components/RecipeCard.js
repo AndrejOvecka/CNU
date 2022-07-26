@@ -1,5 +1,4 @@
-import { Card, Text, Image, Group } from '@mantine/core';
-
+import { Card, Text, Image } from '@mantine/core';
 import { Link } from 'react-router-dom';
 
 import placeholder from '../images/food-placeholder.png';

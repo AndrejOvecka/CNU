@@ -2,12 +2,12 @@ import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Loader } from '@mantine/core';
+import { formList } from '@mantine/form';
 
 import { api } from '../api';
 
 import useRecipe from '../hooks/useRecipe';
 import { RecipeForm } from '../components/RecipeForm';
-import { formList } from '@mantine/form';
 import { AlertBar } from '../components/AlertBar';
 
 export function EditRecipePage() {
@@ -37,7 +37,6 @@ export function EditRecipePage() {
     ingredients.map((ingredient) =>
       ingredient.isGroup ? null : { ...ingredient, isGroup: false },
     );
-    console.log('ingredience : ' + JSON.stringify(ingredients));
   }
 
   const handleSubmit = async (form) => {

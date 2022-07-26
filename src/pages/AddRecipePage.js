@@ -2,9 +2,11 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { formList } from '@mantine/form';
-import { api } from '../api';
-import { RecipeForm } from '../components/RecipeForm';
 import { randomId } from '@mantine/hooks';
+
+import { api } from '../api';
+
+import { RecipeForm } from '../components/RecipeForm';
 
 export function AddRecipePage() {
   const [error, setError] = useState('');
@@ -12,7 +14,6 @@ export function AddRecipePage() {
   const navigate = useNavigate();
 
   const handleSubmit = async (form) => {
-    console.log('toto je form: ' + JSON.stringify(form));
     try {
       const response = await api.post(`/recipes`, form);
       if (response && response.data) {

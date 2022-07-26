@@ -20,7 +20,6 @@ export function RecipeListPage() {
 
   const handleSearchInputChange = ({ target }) => setSearchValue(target.value);
 
-  //filtrovanie receptov, odstranenie diakritiky
   useEffect(() => {
     const filterredRecipes = recipes.filter(({ title }) => {
       return removeAccents(title).includes(removeAccents(searchValue));
@@ -28,7 +27,6 @@ export function RecipeListPage() {
     setData(filterredRecipes);
   }, [recipes, searchValue]);
 
-  // sorting podla casu pripravy a abecedy
   useEffect(() => {
     const sortArray = (type) => {
       const types = {
@@ -43,9 +41,6 @@ export function RecipeListPage() {
           : (a[sortProperty] ? a[sortProperty] : 0) -
             (b[sortProperty] ? b[sortProperty] : 0),
       );
-      sorted.map(({ preparationTime }) => {
-        console.log(preparationTime);
-      });
       setData(sorted);
     };
 
