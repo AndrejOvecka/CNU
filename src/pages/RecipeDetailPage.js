@@ -12,7 +12,7 @@ import useRecipe from '../hooks/useRecipe';
 import { AlertBar } from '../components/alerts/AlertBar';
 import { SideDishBadge } from '../components/SideDishBadge';
 import { PeraparationTimeBox } from '../components/PreparationTimeBox';
-import { NoIngredienceBar } from '../components/alerts/NoIngredienceBar.js';
+import { NoIngredienceBar } from '../components/alerts/NoIngredienceBar';
 
 const { Col } = Grid;
 
@@ -53,8 +53,8 @@ export function RecipeDetailPage() {
 
   return (
     <>
-      <Grid>
-        <Col span={10}>
+      <Grid justify="space-between">
+        <Col span={9}>
           <Title order={1} align="left">
             {title}
           </Title>
