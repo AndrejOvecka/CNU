@@ -1,0 +1,15 @@
+.directions h1,
+.directions h2,
+.directions h3,
+.directions h4,
+.directions h5,
+.directions h6,
+.directions p > strong {
+  font-size: 25px;
+  padding-left: 15px;
+}
+
+.directions ol {
+  list-style-position: inside;
+  padding: 0;
+}

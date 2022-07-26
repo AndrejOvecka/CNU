@@ -42,7 +42,7 @@ export function RecipeForm({ initialForm, handleSubmit }) {
             <SubmitButton text="Uložit" />
           </Col>
           <Col span={1} pl={31}>
-            <BackButton text={'Zpět'} url={`/`} />
+            <BackButton text={'Zpět'} />
           </Col>
         </Grid>
         <Grid justify="space-between">
@@ -134,6 +134,7 @@ export function RecipeForm({ initialForm, handleSubmit }) {
             ))}
             <Grid justify="right">
               <Button
+                variant="outline"
                 mr={8}
                 mt={30}
                 mb={10}
@@ -147,7 +148,7 @@ export function RecipeForm({ initialForm, handleSubmit }) {
                   })
                 }
               >
-                Přidat
+                Přidat ingredienci
               </Button>
             </Grid>
           </Col>

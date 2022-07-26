@@ -1,14 +1,14 @@
-import { Card, Text, Badge, Image, Group } from '@mantine/core';
+import { Card, Text, Image, Group } from '@mantine/core';
 
 import { Link } from 'react-router-dom';
-import { Clock, Meat } from 'tabler-icons-react';
 
 import placeholder from '../images/food-placeholder.png';
-import toHoursAndMinutes from '../utils/toHoursAndMinutes';
+import { PeraparationTimeBox } from './PreparationTimeBox';
+import { SideDishBadge } from './SideDishBadge';
 
 export function RecipeCard({ title, preparationTime, sideDish, _id }) {
   return (
-    <Card shadow="sm" className="h-100" withBorder={true}>
+    <Card shadow="sm" className="h-100" withBorder radius="md">
       <Link className="text-reset text-decoration-none" to={`/recipes/${_id}`}>
         <Card.Section>
           <Image fit="cover" src={placeholder} alt="Preview" />
@@ -16,26 +16,15 @@ export function RecipeCard({ title, preparationTime, sideDish, _id }) {
         <Text weight={500} size="lg">
           {title}
         </Text>
+
         {preparationTime && (
-          <Group spacing="xs">
-            <Clock size={20} strokeWidth={2} color={'black'} />
-            <Text size="sm">
-              <span> {toHoursAndMinutes(preparationTime)}</span>
-            </Text>
-          </Group>
+          <PeraparationTimeBox
+            preparationTime={preparationTime}
+            color="black"
+            py={5}
+          />
         )}
-        <div className="mt-1">
-          {sideDish && (
-            <Badge>
-              <Group spacing="xs">
-                <Meat size={15} strokeWidth={2.5} color={'#1c7ed6'} />{' '}
-                <Text size={15} color={'#1c7ed6'}>
-                  {sideDish}
-                </Text>
-              </Group>
-            </Badge>
-          )}
-        </div>
+        {sideDish && <SideDishBadge sideDish={sideDish} />}
       </Link>
     </Card>
   );

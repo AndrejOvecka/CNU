@@ -1,32 +1,22 @@
 import { useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import {
-  Button,
-  Grid,
-  Loader,
-  Container,
-  Group,
-  Text,
-  Title,
-  Badge,
-} from '@mantine/core';
+import { Button, Grid, Loader, Group, Title, Tooltip } from '@mantine/core';
 
 import { api } from '../api';
 
 import { DeleteRecipeButton } from '../components/DeleteRecipeButton';
-import { Direcions } from '../components/Directions';
-import { IngredientsPaper } from '../components/IngredientsPaper';
+import { DirecionsList } from '../components/DirectionsList';
+import { IngredientsList } from '../components/IngredientsList';
 import useRecipe from '../hooks/useRecipe';
-import toHoursAndMinutes from '../utils/toHoursAndMinutes';
 import { AlertBar } from '../components/AlertBar';
-import { Clock, Meat } from 'tabler-icons-react';
+import { SideDishBadge } from '../components/SideDishBadge';
+import { PeraparationTimeBox } from '../components/PreparationTimeBox';
 
 const { Col } = Grid;
 
 export function RecipeDetailPage() {
   const [error, setError] = useState('');
-  const [portions, setPortions] = useState(1);
 
   const { id } = useParams();
   const navigate = useNavigate();
@@ -43,7 +33,16 @@ export function RecipeDetailPage() {
     }
   };
 
-  console.log(error);
+  const {
+    title,
+    preparationTime,
+    ingredients,
+    directions,
+    sideDish,
+    servingCount,
+  } = recipe;
+
+  console.log('poritons 1: ' + servingCount);
 
   if (isLoading && !recipe) {
     return <Loader />;
@@ -53,10 +52,8 @@ export function RecipeDetailPage() {
     return <AlertBar message="Nepodařilo se načíst recept." />;
   }
 
-  const { title, preparationTime, ingredients, directions, sideDish } = recipe;
-
   return (
-    <Container size="xl">
+    <>
       <Grid>
         <Col span={10}>
           <Title order={1} align="left">
@@ -77,39 +74,32 @@ export function RecipeDetailPage() {
       </Grid>
       <Grid pl={12}>
         <Group spacing="xs">
-          <Clock size={20} strokeWidth={2} color={'#1c7ed6'} />
           {preparationTime && (
-            <Text size="md" color="blue" weight="500">
-              {' '}
-              {toHoursAndMinutes(preparationTime)}
-            </Text>
+            <PeraparationTimeBox
+              preparationTime={preparationTime}
+              color="#1c7ed6"
+            />
           )}
           {sideDish && (
-            <Badge>
-              <Group spacing="xs">
-                <Meat size={20} strokeWidth={2} color={'#1c7ed6'} />{' '}
-                <Text size={20} color={'#1c7ed6'}>
-                  {sideDish}
-                </Text>
-              </Group>
-            </Badge>
+            <Tooltip label={sideDish} pt={5}>
+              <SideDishBadge sideDish={sideDish} />
+            </Tooltip>
           )}
         </Group>
       </Grid>
       <Grid gutter="xl" justify="space-between" my={30}>
         <Col span={4}>
           {ingredients && ingredients.length > 0 && (
-            <IngredientsPaper
+            <IngredientsList
               ingredients={ingredients}
-              portions={portions}
-              setPortions={setPortions}
+              servingCount={servingCount}
             />
           )}
         </Col>
         <Col span={7}>
-          {directions && <Direcions directions={directions} />}
+          {directions && <DirecionsList directions={directions} />}
         </Col>
       </Grid>
-    </Container>
+    </>
   );
 }

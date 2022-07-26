@@ -1,15 +1,14 @@
-import {
-  AppShell,
-  Header,
-  Footer,
-  Anchor,
-  Container,
-  Title,
-} from '@mantine/core';
+import { Header, Footer, Anchor, Container, Title } from '@mantine/core';
 
 export default function Layout({ children }) {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        height: '100vh',
+      }}
+    >
       <Header
         height={70}
         style={{ backgroundColor: '#b3bed0', height: '70px' }}
@@ -32,7 +31,7 @@ export default function Layout({ children }) {
         </Container>
       </Header>
 
-      <main style={{ background: '#f5f7f9', paddingBlock: '30px' }}>
+      <main style={{ paddingBlock: '30px' }}>
         <Container size="xl">{children}</Container>
       </main>
 
