@@ -4,7 +4,7 @@ import { Grid, Button, Select, Loader } from '@mantine/core';
 
 import { SearchInput } from '../components/SearchInput';
 import { RecipesList } from '../components/RecipesList';
-import { AlertBar } from '../components/AlertBar';
+import { AlertBar } from '../components/alerts/AlertBar';
 import useRecipes from '../hooks/useRecipes';
 import removeAccents from '../utils/removeAccents';
 
@@ -59,7 +59,7 @@ export function RecipeListPage() {
             color="green"
             onClick={() => navigate('/recipe/add')}
           >
-            Přidat recept
+            Vytvořit recept
           </Button>
         </Col>
       </Grid>
@@ -84,7 +84,9 @@ export function RecipeListPage() {
         </Col>
       </Grid>
       {isLoading && <Loader className="mb-4" />}
-      {hasError && <AlertBar message="Vyskytla se chyba při načítání dat" />}
+      {hasError && (
+        <AlertBar message="Vyskytla se chyba při načítání receptů" />
+      )}
       <RecipesList recipes={data} />
     </>
   );

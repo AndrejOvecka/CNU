@@ -9,9 +9,10 @@ import { DeleteRecipeButton } from '../components/buttons/DeleteRecipeButton';
 import { DirecionsList } from '../components/lists/DirectionsList';
 import { IngredientsList } from '../components/lists/IngredientsList';
 import useRecipe from '../hooks/useRecipe';
-import { AlertBar } from '../components/AlertBar';
+import { AlertBar } from '../components/alerts/AlertBar';
 import { SideDishBadge } from '../components/SideDishBadge';
 import { PeraparationTimeBox } from '../components/PreparationTimeBox';
+import { NoIngredienceBar } from '../components/alerts/NoIngredienceBar.js';
 
 const { Col } = Grid;
 
@@ -87,11 +88,13 @@ export function RecipeDetailPage() {
       </Grid>
       <Grid gutter="xl" justify="space-between" my={30}>
         <Col span={4}>
-          {ingredients && ingredients.length > 0 && (
+          {ingredients && ingredients.length > 0 ? (
             <IngredientsList
               ingredients={ingredients}
               servingCount={servingCount}
             />
+          ) : (
+            <NoIngredienceBar />
           )}
         </Col>
         <Col span={7}>

@@ -20,7 +20,7 @@ export function AddRecipePage() {
         const id = response.data._id;
         navigate(`/recipes/${id}`);
       }
-      toast.success('Recept byl úspěšně vytvořen!');
+      toast.success('Recept byl úspěšně vytvořen! 🥳');
     } catch (errorMessage) {
       setError(errorMessage);
       toast.error(`Něco se nepovedlo. ` + error);

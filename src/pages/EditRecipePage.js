@@ -8,7 +8,7 @@ import { api } from '../api';
 
 import useRecipe from '../hooks/useRecipe';
 import { RecipeForm } from '../components/RecipeForm';
-import { AlertBar } from '../components/AlertBar';
+import { AlertBar } from '../components/alerts/AlertBar';
 
 export function EditRecipePage() {
   const [error, setError] = useState(false);
@@ -45,8 +45,8 @@ export function EditRecipePage() {
       toast.success(`Recept ${title} byl upraven! 🥳`);
       navigate(`/recipes/${id}`);
     } catch (errorMessage) {
-      setError(true);
-      toast.error(error);
+      setError(errorMessage);
+      toast.error('Něco se nepovedlo: ' + error);
     }
   };
 
