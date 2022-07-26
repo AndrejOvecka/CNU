@@ -5,8 +5,8 @@ export function DeleteRecipeButton({ title, ...props }) {
   const [showModal, setShowModal] = useState(false);
 
   return (
-    <div className="mb-3">
-      <Button color="red" onClick={() => setShowModal(true)}>
+    <>
+      <Button color="red" variant="outline" onClick={() => setShowModal(true)}>
         Smazat
       </Button>
       <Modal
@@ -19,15 +19,11 @@ export function DeleteRecipeButton({ title, ...props }) {
       >
         <Group>
           <Button {...props}>Smazat</Button>
-          <Button
-            variant="outline"
-            color="red"
-            onClick={() => setShowModal(false)}
-          >
+          <Button color="red" onClick={() => setShowModal(false)}>
             Zrušit
           </Button>
         </Group>
       </Modal>
-    </div>
+    </>
   );
 }

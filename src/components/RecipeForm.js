@@ -1,5 +1,4 @@
 import { useForm } from '@mantine/form';
-import { useParams, useNavigate } from 'react-router-dom';
 import {
   ActionIcon,
   Autocomplete,
@@ -24,7 +23,6 @@ const { Col } = Grid;
 export function RecipeForm({ initialForm, handleSubmit }) {
   const [, setIsGroup] = useState(false);
   const { ingredientsList, hasError, isLoading } = useIngredients();
-  const { id } = useParams();
 
   const form = useForm({
     initialValues: initialForm,
@@ -44,7 +42,7 @@ export function RecipeForm({ initialForm, handleSubmit }) {
             <SubmitButton text="Uložit" />
           </Col>
           <Col span={1} pl={31}>
-            <BackButton text={'Zpět'} url={`/`} />
+            <BackButton text={'Zpět'} />
           </Col>
         </Grid>
         <Grid justify="space-between">
@@ -136,6 +134,7 @@ export function RecipeForm({ initialForm, handleSubmit }) {
             ))}
             <Grid justify="right">
               <Button
+                variant="outline"
                 mr={8}
                 mt={30}
                 mb={10}
@@ -149,7 +148,7 @@ export function RecipeForm({ initialForm, handleSubmit }) {
                   })
                 }
               >
-                Přidat
+                Přidat ingredienci
               </Button>
             </Grid>
           </Col>
