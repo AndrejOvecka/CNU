@@ -15,8 +15,8 @@ import { useState } from 'react';
 import useIngredients from '../hooks/useIngredients';
 import { randomId } from '@mantine/hooks';
 import { Trash } from 'tabler-icons-react';
-import { SubmitButton } from './SubmitButton';
-import { BackButton } from './BackButton';
+import { SubmitButton } from './buttons/SubmitButton';
+import { BackButton } from './buttons/BackButton';
 
 const { Col } = Grid;
 

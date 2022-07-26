@@ -5,9 +5,9 @@ import { Button, Grid, Loader, Group, Title, Tooltip } from '@mantine/core';
 
 import { api } from '../api';
 
-import { DeleteRecipeButton } from '../components/DeleteRecipeButton';
-import { DirecionsList } from '../components/DirectionsList';
-import { IngredientsList } from '../components/IngredientsList';
+import { DeleteRecipeButton } from '../components/buttons/DeleteRecipeButton';
+import { DirecionsList } from '../components/lists/DirectionsList';
+import { IngredientsList } from '../components/lists/IngredientsList';
 import useRecipe from '../hooks/useRecipe';
 import { AlertBar } from '../components/AlertBar';
 import { SideDishBadge } from '../components/SideDishBadge';
