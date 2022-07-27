@@ -1,4 +1,7 @@
 import { useForm } from '@mantine/form';
+import { useState } from 'react';
+import { randomId } from '@mantine/hooks';
+import { Trash } from 'tabler-icons-react';
 import {
   ActionIcon,
   Autocomplete,
@@ -11,10 +14,8 @@ import {
   TextInput,
   Title,
 } from '@mantine/core';
-import { useState } from 'react';
+
 import useIngredients from '../hooks/useIngredients';
-import { randomId } from '@mantine/hooks';
-import { Trash } from 'tabler-icons-react';
 import { SubmitButton } from './buttons/SubmitButton';
 import { BackButton } from './buttons/BackButton';
 

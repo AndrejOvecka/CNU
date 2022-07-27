@@ -7,11 +7,11 @@ import { api } from '../api';
 import { DeleteRecipeButton } from '../components/buttons/DeleteRecipeButton';
 import { DirecionsList } from '../components/lists/DirectionsList';
 import { IngredientsList } from '../components/lists/IngredientsList';
-import useRecipe from '../hooks/useRecipe';
 import { AlertBar } from '../components/alerts/AlertBar';
 import { SideDishBadge } from '../components/SideDishBadge';
 import { PeraparationTimeBox } from '../components/PreparationTimeBox';
 import { NoIngredienceBar } from '../components/alerts/NoIngredienceBar';
+import useRecipe from '../hooks/useRecipe';
 
 const { Col } = Grid;
 
