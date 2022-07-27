@@ -66,7 +66,7 @@ export function RecipeListPage() {
       <Grid>
         <Col lg={10}>
           <SearchInput
-            className="mb-4"
+            mb={20}
             value={searchValue}
             onChange={handleSearchInputChange}
           />
@@ -83,7 +83,7 @@ export function RecipeListPage() {
           />
         </Col>
       </Grid>
-      {isLoading && <Loader className="mb-4" />}
+      {isLoading && <Loader mb={20} />}
       {hasError && (
         <AlertBar message="Vyskytla se chyba při načítání receptů" />
       )}
