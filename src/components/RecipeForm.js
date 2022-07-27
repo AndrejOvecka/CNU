@@ -58,6 +58,7 @@ export function RecipeForm({ initialForm, handleSubmit }) {
               <Col span={3}>
                 <NumberInput
                   placeholder="Počet porcí"
+                  min={1}
                   label="Počet porcí"
                   {...form.getInputProps('servingCount')}
                 />
@@ -110,7 +111,7 @@ export function RecipeForm({ initialForm, handleSubmit }) {
                   <Col span={3}>
                     <NumberInput
                       placeholder="Množství"
-                      min={0}
+                      min={1}
                       disabled={item.isGroup}
                       {...form.getListInputProps(
                         'ingredients',
