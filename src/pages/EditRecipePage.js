@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Loader } from '@mantine/core';
@@ -11,8 +10,6 @@ import { RecipeForm } from '../components/RecipeForm';
 import { AlertBar } from '../components/alerts/AlertBar';
 
 export function EditRecipePage() {
-  const [error, setError] = useState(false);
-
   const { id } = useParams();
   const navigate = useNavigate();
   const { isLoading, recipe, hasError } = useRecipe(`/recipes/${id}`);
@@ -44,9 +41,8 @@ export function EditRecipePage() {
       await api.post(`/recipes/${id}`, form);
       toast.success(`Recept ${title} byl upraven! 🥳`);
       navigate(`/recipes/${id}`);
-    } catch (errorMessage) {
-      setError(errorMessage);
-      toast.error('Něco se nepovedlo: ' + error);
+    } catch (error) {
+      toast.error('Něco se nepovedlo.');
     }
   };
 

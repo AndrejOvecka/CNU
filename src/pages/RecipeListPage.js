@@ -6,7 +6,7 @@ import { SearchInput } from '../components/SearchInput';
 import { RecipesList } from '../components/RecipesList';
 import { AlertBar } from '../components/alerts/AlertBar';
 import useRecipes from '../hooks/useRecipes';
-import removeAccents from '../utils/removeAccents';
+import normalizeText from '../utils/normalizeText';
 
 const { Col } = Grid;
 
@@ -22,7 +22,7 @@ export function RecipeListPage() {
 
   useEffect(() => {
     const filterredRecipes = recipes.filter(({ title }) => {
-      return removeAccents(title).includes(removeAccents(searchValue));
+      return normalizeText(title).includes(normalizeText(searchValue));
     });
     setData(filterredRecipes);
   }, [recipes, searchValue]);

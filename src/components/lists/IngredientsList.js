@@ -17,8 +17,8 @@ export function IngredientsList({ ingredients, servingCount = 1 }) {
         />
       </Group>
       <List type="unordered" icon={<Carrot color="orange" />}>
-        {ingredients.map(({ amount, amountUnit, name, isGroup }) => (
-          <>
+        {ingredients.map(({ amount, amountUnit, name, isGroup, _id }) => (
+          <div key={_id}>
             {!isGroup ? (
               <Text>
                 {amount ? (
@@ -34,7 +34,7 @@ export function IngredientsList({ ingredients, servingCount = 1 }) {
                 {name}
               </Title>
             )}
-          </>
+          </div>
         ))}
       </List>
     </Paper>

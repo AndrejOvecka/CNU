@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { formList } from '@mantine/form';
@@ -9,8 +8,6 @@ import { api } from '../api';
 import { RecipeForm } from '../components/RecipeForm';
 
 export function AddRecipePage() {
-  const [error, setError] = useState('');
-
   const navigate = useNavigate();
 
   const handleSubmit = async (form) => {
@@ -21,9 +18,8 @@ export function AddRecipePage() {
         navigate(`/recipes/${id}`);
       }
       toast.success('Recept byl úspěšně vytvořen! 🥳');
-    } catch (errorMessage) {
-      setError(errorMessage);
-      toast.error(`Něco se nepovedlo. ` + error);
+    } catch (error) {
+      toast.error('Něco se nepovedlo.');
     }
   };
 

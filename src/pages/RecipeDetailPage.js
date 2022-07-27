@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Button, Grid, Loader, Group, Title, Tooltip } from '@mantine/core';
@@ -17,8 +16,6 @@ import { NoIngredienceBar } from '../components/alerts/NoIngredienceBar';
 const { Col } = Grid;
 
 export function RecipeDetailPage() {
-  const [error, setError] = useState('');
-
   const { id } = useParams();
   const navigate = useNavigate();
   const { isLoading, recipe, hasError } = useRecipe(`/recipes/${id}`);
@@ -26,11 +23,10 @@ export function RecipeDetailPage() {
   const handleDeleteRecipe = async (id) => {
     try {
       await api.delete(`/recipes/${id}`);
-      toast.success('Recept byl smazán!');
+      toast.success(`Recept ${title} byl smazán!`);
       navigate('/');
-    } catch (errorMessage) {
-      setError(errorMessage);
-      toast.error(`Něco se nepovedlo: ${error}`);
+    } catch (error) {
+      toast.error('Něco se nepovedlo.');
     }
   };
 
