@@ -28,7 +28,14 @@ export function EditRecipePage() {
     return null;
   }
 
-  const { title, directions, preparationTime, sideDish, ingredients } = recipe;
+  const {
+    title,
+    directions,
+    preparationTime,
+    sideDish,
+    ingredients,
+    servingCount,
+  } = recipe;
 
   if (ingredients) {
     ingredients.map((ingredient) =>
@@ -51,6 +58,7 @@ export function EditRecipePage() {
     preparationTime: preparationTime,
     sideDish: sideDish,
     directions: directions,
+    servingCount: servingCount,
     ingredients: ingredients ? formList(ingredients) : [{}],
   };
 

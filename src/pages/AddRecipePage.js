@@ -28,6 +28,7 @@ export function AddRecipePage() {
     preparationTime: '',
     sideDish: '',
     directions: '',
+    servingCount: '',
     ingredients: formList([
       {
         name: '',

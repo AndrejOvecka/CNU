@@ -47,11 +47,22 @@ export function RecipeForm({ initialForm, handleSubmit }) {
         </Grid>
         <Grid justify="space-between">
           <Col span={5}>
-            <TextInput
-              label="Název receptu"
-              placeholder="Název receptu"
-              {...form.getInputProps('title')}
-            />
+            <Grid>
+              <Col span={9}>
+                <TextInput
+                  label="Název receptu"
+                  placeholder="Název receptu"
+                  {...form.getInputProps('title')}
+                />
+              </Col>
+              <Col span={3}>
+                <NumberInput
+                  placeholder="Počet porcí"
+                  label="Počet porcí"
+                  {...form.getInputProps('servingCount')}
+                />
+              </Col>
+            </Grid>
             <Grid>
               <Col span={6}>
                 <TextInput
@@ -72,7 +83,7 @@ export function RecipeForm({ initialForm, handleSubmit }) {
               Přidat ingredienci
             </Title>
             {form.values.ingredients.map((item, index) => (
-              <div key={item.key}>
+              <div key={index}>
                 <Grid>
                   <Col>
                     {item.isGroup !== undefined && (

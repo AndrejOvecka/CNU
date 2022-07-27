@@ -16,7 +16,7 @@ const useIngredients = (url) => {
         setIngredientsList(response.data);
         setIsLoading(false);
       })
-      .catch((error) => {
+      .catch(() => {
         setHasError(true);
       })
       .finally(() => {
